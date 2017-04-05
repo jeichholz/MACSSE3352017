@@ -1,1 +1,22 @@
-../../Homework/Hw4/distrib/1wordpalindromes.txt
+numwords: 1
+dictfile: dictionary_stuff/dict.txt
+sees
+sexes
+wow
+The dictionary is 12554 words long
+There are 12554 word combinations
+bob
+deed
+did
+level
+eye
+mom
+mum
+noon
+gig
+nun
+hah
+huh
+pop
+radar
+refer
