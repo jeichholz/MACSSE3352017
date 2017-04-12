@@ -83,7 +83,7 @@ for np,dl,r in zip(num_procs,data_len,root):
         else:
             targ_sends=0
         if num_sends != targ_sends:
-            print "Error, rank "+str(p)+" should have done "+np-1+" sends, but it did "+num_sends
+            print "Error, rank "+str(p)+" should have done "+str(np-1)+" sends, but it did "+str(num_sends)
         final_data=map(int,L[-1].split(':')[1].strip().strip('[]').split(','))
         if final_data!=data[:dl][dl/np*p:dl/np*(p+1)]:
             print "Error, rank "+str(p)+" should have ended up with "+str(data[:dl][dl/np*(p-1):dl/np*p])+" but it ended up with "+str(final_data)
