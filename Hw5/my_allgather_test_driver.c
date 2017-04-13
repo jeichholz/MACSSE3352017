@@ -4,7 +4,7 @@
 #include<string.h>
 #include<time.h>
 
-void my_alltoall(int* send_buffer,int send_count, int* recvbuf, int recvcount,  MPI_Comm comm);
+void my_allgather(int* send_buffer,int send_count, int* recvbuf, int recvcount,  MPI_Comm comm);
 void make_int_array_str(int* arr, int len, char** str,int maxprintlen);
 
 typedef struct{
@@ -145,7 +145,7 @@ int __wrap_main(int argc,char** argv){
   make_int_array_str(recv_buff,lenperproc*size,&recvbufstr,20);
   printf("Rank %d calls my_alltoall with:\nsendbuff:%s\nsendcount:%d\nrecvbuff:%s\nrecvcount:%d\n\n",rank,sendbufstr,lenperproc,recvbufstr,lenperproc);
   
-  my_alltoall(send_buff,lenperproc,recv_buff,lenperproc,MPI_COMM_WORLD);
+  my_allgather(send_buff,lenperproc,recv_buff,lenperproc,MPI_COMM_WORLD);
 
   make_int_array_str(recv_buff,lenperproc*size,&recvbufstr,40);
   printf("Rank %d finishes my_alltoall with:\nrecv_buff: %s\n\n",rank,recvbufstr);

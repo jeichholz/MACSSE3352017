@@ -26,11 +26,11 @@ def lcgarr(a,c,m,x0,l):
         x.append((a*x[i-1]+c)%m)
     return x
 
-sourcename="my_alltoall.c"
-exename="my_alltoall_exe"
+sourcename="my_allgather.c"
+exename="my_allgather_exe"
 timeout=30
 
-mpicccommand=["mpicc","--std=c99",'-g','-lm','-Wl,-wrap,MPI_Recv',"-Wl,-wrap,MPI_Send", "-Wl,-wrap,main", sourcename, "test_helpers.c","my_alltoall_test_driver.c","mpi_send_wrapper.c","-o",exename]
+mpicccommand=["mpicc","--std=c99",'-g','-lm','-Wl,-wrap,MPI_Recv',"-Wl,-wrap,MPI_Send", "-Wl,-wrap,main", sourcename, "test_helpers.c","my_allgather_test_driver.c","mpi_send_wrapper.c","-o",exename]
 print "Compiling your "+sourcename+" file ...."
 print " ".join(mpicccommand)
 gcc_status=subprocess.call(mpicccommand)
