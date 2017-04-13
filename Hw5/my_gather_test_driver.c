@@ -142,7 +142,7 @@ int __wrap_main(int argc,char** argv){
   init_data(&o,&send_buff,&lenperproc,&recv_buff);
 
   int sendcount=lenperproc;
-  int recvcount=rank==o.root?lenperproc*size:0;
+  int recvcount=rank==o.root?lenperproc:0;
 
 
   char* sendbufstr,*recvbufstr;
@@ -156,7 +156,7 @@ int __wrap_main(int argc,char** argv){
 
   printf("Rank %d calls my_gather with:\nsend_buf:%s\nsend_count:%d\nrecv_buf:%s\nrecv_count:%d\nroot:%d\n\n",rank,sendbufstr,sendcount,recvbufstr,recvcount,o.root);
   
-  my_gather(recv_buff,lenperproc,send_buff,sendcount,o.root,MPI_COMM_WORLD);
+  my_gather(recv_buff,recvcount,send_buff,sendcount,o.root,MPI_COMM_WORLD);
 
   
   char* result_str;
