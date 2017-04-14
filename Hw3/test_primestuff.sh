@@ -3,11 +3,19 @@
 
 pname=primestuff
 
+standard_dir='./'
+
 num_testcases=7
 
 timeout_len=5
 
 overall_success=1
+
+if [ $# > 1 ]
+then
+    standard_dir=$1
+fi
+
 
 function ifname()
 {
@@ -51,7 +59,7 @@ do
     timeout $timeout_len ./$pname ${com[$testcase]} > "$(ofname $pname $testcase 0)"
     code_timeout=$?
     
-    timeout $timeout_len ./${pname}_standard ${com[$testcase]} > "$(ofname $pname $testcase 1)"
+    timeout $timeout_len ${standard_dir}/${pname}_standard ${com[$testcase]} > "$(ofname $pname $testcase 1)"
 
 
     if [ $code_timeout == 124 ]
@@ -82,6 +90,8 @@ done
 if [ $overall_success == 1 ]
 then
     echo "All tests sucessful.  This code is now acceptable"
+    exit 0
 else
     echo "At least one test unsucessful.  This code is not yet acceptable."
+    exit 1
 fi
