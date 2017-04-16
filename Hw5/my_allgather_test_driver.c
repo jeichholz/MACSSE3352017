@@ -143,12 +143,12 @@ int __wrap_main(int argc,char** argv){
   
   make_int_array_str(send_buff,lenperproc,&sendbufstr,20);
   make_int_array_str(recv_buff,lenperproc*size,&recvbufstr,20);
-  printf("Rank %d calls my_alltoall with:\nsendbuff:%s\nsendcount:%d\nrecvbuff:%s\nrecvcount:%d\n\n",rank,sendbufstr,lenperproc,recvbufstr,lenperproc);
+  printf("Rank %d calls my_allgather with:\nsendbuff:%s\nsendcount:%d\nrecvbuff:%s\nrecvcount:%d\n\n",rank,sendbufstr,lenperproc,recvbufstr,lenperproc);
   
   my_allgather(send_buff,lenperproc,recv_buff,lenperproc,MPI_COMM_WORLD);
 
   make_int_array_str(recv_buff,lenperproc*size,&recvbufstr,40);
-  printf("Rank %d finishes my_alltoall with:\nrecv_buff: %s\n\n",rank,recvbufstr);
+  printf("Rank %d finishes my_allgather with:\nrecv_buff: %s\n\n",rank,recvbufstr);
   
   char* result_str;
 
