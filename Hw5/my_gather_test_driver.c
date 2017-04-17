@@ -148,7 +148,7 @@ int __wrap_main(int argc,char** argv){
   char* sendbufstr,*recvbufstr;
 
   make_int_array_str(send_buff,sendcount,&sendbufstr,20);
-  make_int_array_str(recv_buff,recvcount,&recvbufstr,20);
+  make_int_array_str(recv_buff,recvcount*size,&recvbufstr,20);
 
   if (rank==o.root){
     printf("Engaging in my_gather\nroot:%d\n",o.root);
