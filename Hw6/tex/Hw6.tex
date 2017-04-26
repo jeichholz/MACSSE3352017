@@ -1,0 +1,221 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+\input{../../../MA335defs}
+\newcommand{\M}{\mathcal{M}}
+
+\newcommand{\N}{\mathcal{N}}
+
+\begin{document}
+\begin{center}
+\Large{MA/CSSE Homework 5}\\
+Due 4/21
+\end{center}
+\vspace{.25in}
+\noindent{\textbf{Directions}}\\
+  \begin{itemize}
+   \item \textbf{Each problem must be self-contained in a file}, named
+     properly, and \textbf{must compile using the
+      command} \texttt{mpicc filename.c}\\
+
+  \item Turn in each \tt{.c} file to the dropbox. \textbf{Do not
+      create a \tt{.zip} file}
+
+  \item On this homework you may not use any of the standard default
+    MPI collective operations. 
+  \end{itemize}
+
+
+\section*{Problems}
+
+\noindent{\textbf{Level:}Easy}\\
+\begin{enumerate}
+
+\item \textit{Goldbach's Conjecture} is one of the most famous
+  unsolved problems in mathematics.  First stated in 1742 in a letter
+  from Christian Goldbach to Leonhard Euler, Goldbach's conjecture
+  claims that every even integer greater than two  may be
+  written as the sum of two prime numbers.  For example, $6$ may be
+  written as $3+3$, $8$ as $5+3$, $10$ as $5+5$, and so on. No one has
+  been able to prove that \textit{every} even integer greater than two
+  is indeed expressible as a sum of two primes, however, no one has
+  ever found a counterexample either. 
+
+  Two prime numbers, $p$ and $q$ that sum to a given integer $n$ form a \textit{Goldbach partition}
+  of $n$.  So, $3$ and $5$ form a Goldbach partition of $8$, and $11$
+  and $13$ form a Goldbach partition of $24$.  Goldbach partitions are
+  not unique, for example $3$ and $7$ form a Goldbach partition of
+  $10$, as do $5$ and $5$. 
+
+  Write a program in a file \tt{goldbach.c} that calculates Goldbach partitions for lists of
+  numbers and prints the partitions.  Use a worker pool (dynamic work
+  allocation) strategy to do so.  The standard code is supplied in
+  \tt{objs/goldbach\_standard.o} and may be compiled with\\ 
+  \tt{mpicc objs/golbach\_standard.o -o goldbach\_standard}\\
+  You need to have a working copy of \tt{goldbach\_standard} in order
+  for the testing code to run. 
+
+  The file \tt{goldbach\_start.c} contains some starting code to get
+  you going.  In particular, reading command line options and
+  determining which numbers need to be checked is taken care of for
+  you.  Once you call \tt{parse\_options}, the list of numbers that
+  need to be checked is stored in the \tt{to\_partition} member of the
+  \tt{options} struct. Run the standard code with \tt{-h} to see a
+  full list of options for specifying which numbers to partition.
+  Just by using \tt{parse\_options} you will automatically support
+  most of the options provided.  
+
+  Here are the requirements that must be met for this problem:
+  \begin{itemize}
+  \item Partitions must be formed using the \tt{goldbach\_partition}
+    function that is supplied. 
+
+  \item Every single number in the \tt{to\_partition} list must be
+    passed to \tt{goldbach\_partition}, even if it is a negative or
+      odd number.
+
+  \item Partitions must be displayed using the format \tt{n: a/b}
+    where \tt{n} is the integer being partitioned, \tt{a} is the
+    smallest number in the partition, and \tt{b} is the largest number
+    in the partition.  For example, the line for $n=8$ should read
+    \tt{8:3/5}. Partitions \textbf{may be printed by the workers} --
+    there is no need to send data back to the master processor. 
+
+   \item \tt{goldbach\_partition} will return 2 if $n$ is odd or $\le
+      2$.  Do not print result line if the result of
+      \tt{goldbach\_partition} is 2.  However, if the result is 3,
+      print out a result line and notify me immediately!
+
+  \item Follow a worker-pool strategy for balancing the work.  The
+    root processor should never call \tt{goldbach\_partition}.  The
+    worker processes should all spend a similar amount of time running
+    (within 10\%).  
+
+  \item Respect the \tt{--chunksize} option.  The \tt{chunksize} is
+    the number of integers to assign to a processor as part of a given
+    assignment.  
+
+  \item Respect the \tt{--print\_results} option. 
+  
+  \item In order to check to see if the load balancing is good, your
+    code is run using 2,3,5,9,17,33 processors.  Your code should be
+    nearly perfectly parallel when the number of integers to check is
+    large (average efficiency of $\ge 60\%$ ). Notice that you'll need to run
+    the tests on \tt{grendel} to get good efficiency with many
+    processes. 
+
+    In order to facilitate your testing, you can have the testing
+    script not do a full efficiency test for you.  The testing script
+    takes an option \tt{--max-procs=n} that tells the script not to test
+    efficiency using more than $n$ processes.  For example,\\
+\tt{./test\_goldbach.py --max-procs=4} tells the testing script not to
+test efficiency using more than 4 processes. Setting
+\tt{--max-procs=0} skips these tests altogther. 
+
+  \item We might want to partition some big numbers, so make sure you
+    can support partitioning \tt{long long int} types. 
+
+
+  \end{itemize}
+
+\end{enumerate}
+
+\newpage
+
+\noindent{\textbf{Level:} Difficult}
+
+Complete the problem above.  In addition:
+
+\begin{enumerate}
+\item Many numbers have many different Goldbach partitions.  For
+  example, 500 can be partitioned as:
+\begin{align*}
+&	13+487\\
+&	37+463\\
+&	43+457\\
+&	61+439\\
+&	67+433\\
+&	79+421\\
+&	103+397\\
+&	127+373\\
+&	151+349\\
+&	163+337\\
+&	193+307\\
+&	223+277\\
+&	229+271.
+\end{align*}
+For an even integer greater than 2, $n$, let's call the smallest
+number appearing in any partition of $n$ the \textit{Goldbach minimum}
+(that is not a standard name)
+of $n$, and denote it as $\M(n)$. We can see from above that
+$\M(500)=13$. The function \tt{goldbach\_partition} has the special
+property that it returns $\M(n)$ in the variable \tt{a}. 
+
+It is interesting that $\M(n)$ is usually a pretty small number. 
+Indeed, from our first program we can tell that $\M(4)=2$, $\M(6)=3$,
+$\dots$ , $\M(98)=19$, $\M(100)=3$.
+
+Define $\N(p)$ to be the smallest even integer $n$ such that $\M(n)\ge
+p$. For instance, $\N(2)=4$, $\N(3)=6$, $\N(5)=18$,$\N(7)=30$ and $\N(19)=98$.
+
+Write a program using a worker-pool approach that prints out $\N(p)$
+and the corresponding Goldbach partition of $\N(p)$ for a given value
+of $p$. 
+
+For example, when $p=2$ your program should print\\
+\tt{N(2)=4: 2/2}\\
+and when $p=7$ your program should print\\
+\tt{N(7)=30: 7/23}.
+
+In addition to submitting \tt{goldbach\_plus.c}, also turn in a file
+\tt{big\_number.txt} that includes the output of your program when run
+with \tt{--p=1700}. 
+
+I've included a file \tt{goldbach\_plus\_helpers.c} to that reads the
+command line options for you. You need not respect \tt{--chunksize}
+though it might be useful for you to do so. 
+
+I've included \tt{goldbach\_plus\_start.c} to start from; leave
+\tt{goldbach\_partition} there and use it in your code. 
+
+I've included the standard code in \tt{objs}, you can compile as you
+did in the first problem.  Again, you a working copy of the standard
+in order for the testing code to work. 
+
+The important option to respect is \tt{--p}, which is the value of $p$
+for which we are calculating $\N(p)$. 
+
+Here are the grading criteria for this problem:
+\begin{itemize}
+\item Your program must always return the correct result, your format
+  must match mine exactly. 
+\item Every calculation of $\M(n)$ must be done using
+  \tt{goldbach\_partition}, which is provided. 
+  \item Follow a worker-pool strategy for balancing the work.  The
+    root processor should never call \tt{goldbach\_partition}.  The
+    worker processes should all spend a similar amount of time running
+    (within 10\%).  
+  \item In order to check to see if the load balancing is good, your
+    code is run using 2,3,5,9,17,33 processors.  Your code should be
+    nearly perfectly parallel when the number of integers to check is
+    large (average efficiency of $\ge 60\%$ ). Notice that you'll need to run
+    the tests on \tt{grendel} to get good efficiency with 3,5,9
+    processes. As in the last problem, you can use a \tt{--max-procs}
+    option to avoid this test, or to reduce the number of processors
+    it uses. 
+  \item There is no ambiguity about what list you need to partition
+    here: it is just $1,2,3,4,\dots$. So your work assignments
+    absolutely should not be lists of numbers to check, your work
+    assignments should just be a range (top and bottom) of numbers to check.
+
+\item You must respect the \tt{--p} option. 
+\end{itemize}
+
+\end{enumerate}
+
+
+
+\end{document}
