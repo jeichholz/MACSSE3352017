@@ -53,8 +53,8 @@ Due 5/3
   Write a program in a file \tt{goldbach.c} that calculates Goldbach partitions for lists of
   numbers and prints the partitions.  Use a worker pool (dynamic work
   allocation) strategy to do so.  The standard code is supplied in
-  \tt{objs/goldbach\_standard.o} and may be compiled with\\ 
-  \tt{mpicc objs/golbach\_standard.o -o goldbach\_standard}\\
+  \tt{objs/goldbach\_standard.<arch>.o} and may be compiled with\\ 
+  \tt{mpicc objs/golbach\_standard.<arch>.o -o goldbach\_standard}\\
   You need to have a working copy of \tt{goldbach\_standard} in order
   for the testing code to run. 
 
@@ -172,7 +172,7 @@ and when $p=7$ your program should print\\
 
 In addition to submitting \tt{goldbach\_plus.c}, also turn in a file
 \tt{big\_number.txt} that includes the output of your program when run
-with \tt{--p=1900}. 
+with \tt{--p=1700}. 
 
 I've included a file \tt{goldbach\_plus\_helpers.c} to that reads the
 command line options for you. You need not respect \tt{--chunksize}
