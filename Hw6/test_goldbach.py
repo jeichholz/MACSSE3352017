@@ -43,10 +43,13 @@ def run_command(command="",abort_on_failure=True,abort_on_timeout=True,timeout_r
         print " ".join(command)
     P=Popen(command,stdin=PIPE,stdout=PIPE,stderr=PIPE)
     timer=Timer(timeout,lambda p:p.kill(),[P])
+    timer.daemon=True;
     timer.start()
     P.wait()
     [s1,s2]=P.communicate();
     if P.returncode != 0 and abort_on_failure:
+        print s1
+        print s2
         print "Error.  The return code was non-zero, meaning that this code crashed."
         fail()
     returncode=P.returncode
