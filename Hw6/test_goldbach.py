@@ -194,7 +194,7 @@ def main(argv):
             datarange=[10,1e5]
         
         for p in np:
-            run_instance(standard=False,dorange=datarange,np=p,timeout=180,chunksize=50000)
+            run_instance(standard=False,dorange=datarange,np=p,timeout=300,chunksize=50000)
             max_runtime.append(0);
             for p1 in range(p):
                 L=open('whatidid.rank.'+str(p1)).readlines();
