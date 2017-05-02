@@ -47,12 +47,6 @@ def run_command(command="",abort_on_failure=True,abort_on_timeout=True,timeout_r
     timer.start()
     P.wait()
     [s1,s2]=P.communicate();
-    if P.returncode != 0 and abort_on_failure:
-        print s1
-        print s2
-        print "Error.  The return code was non-zero, meaning that this code crashed."
-        fail()
-    returncode=P.returncode
     if timer.isAlive():
         timer.cancel()
     else:
@@ -60,7 +54,14 @@ def run_command(command="",abort_on_failure=True,abort_on_timeout=True,timeout_r
             print "It looks like this code entered an infinite loop, or was stuck waiting for input, or just refused to exit.  I had to kill it manually. "
             fail()
         else:
-            returncode=timeout_returncode
+            returncode=timeout_returncode    
+    if P.returncode != 0 and abort_on_failure:
+        print s1
+        print s2
+        print "Error.  The return code was non-zero, meaning that this code crashed."
+        fail()
+    returncode=P.returncode
+
     if print_output:
         print s1
         print s2
