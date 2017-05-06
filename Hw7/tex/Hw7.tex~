@@ -4,10 +4,8 @@
 \usepackage{mathtools}
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 
-\input{../../../MA335defs}
-\newcommand{\M}{\mathcal{M}}
+\input{MA335defs}
 
-\newcommand{\N}{\mathcal{N}}
 
 \begin{document}
 \begin{center}
@@ -81,7 +79,9 @@ Here are the criteria to keep in mind:
 
 \item Your code will be run with $1,2,4,8,16,$ and $32$ processes.
   Your code may take no more than $2$ times as long as the standard
-  code in each case.  
+  code in each case.  As with homework 6, you may skip some of this
+  testing using the \tt{--max-proc=<n>} option to the
+  \tt{test\_bucketsort.py} program. 
 
 \end{enumerate}
 
@@ -167,7 +167,12 @@ Here are the facts you need to know about the simulation:
   \tt{get\_state} in \tt{gol\_helpers} that will get the state of a
   board at generation $t$, row $i$, column $j$.  It handles wraparound
   properly, so that asking for row 1, column -1 will get the
-  \textit{rightmost} entry of row 1. 
+  \textit{rightmost} entry of row 1.
+
+\item The state of a cell $i,j$ at time $t$ can be set using
+  \tt{set\_state}.  You \textbf{must} use \tt{set\_state} to set the
+  state of the board every time -- it is how I keep track of how much
+  work each processor does.  
 
 \item All indexing is 0 based. 
 
@@ -221,6 +226,25 @@ Here are the facts you need to know about the simulation:
   \tt{gol\_start.c} gives you a start on the parallel version, and
   \tt{gol\_helpers.h} and \tt{gol\_comm\_helpers.h} are the
   appropriate helper functions. 
+
+\item It is perfectly reasonable on this assignment to modify my
+  helper files, or to create your own helper files.  So, you
+  \textbf{must submit all files required to compile your code,
+    including the ones I distribute to you}.  Your code must compile
+  with a simple\\
+\tt{mpicc gol.c}
+Feel free to modify any of my functions that you want, with the
+exception of \tt{set\_state}. You do not need to submit any of the
+initial condition files, etc. 
+
+\item Your code will be run with $1,2,4,8,16,$ and $32$ processes.
+  Your code may take no more than $2$ times as long as the standard
+  code in each case.  As with homework 6, you may skip some of this
+  testing using the \tt{--max-proc=<n>} option to the
+  \tt{test\_gol.py} program. 
+
+\item You may use \tt{rang\_gol\_board.c} to create random initial
+  states if you like. 
 
 \end{itemize}
 
