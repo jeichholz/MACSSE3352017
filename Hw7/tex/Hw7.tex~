@@ -58,11 +58,19 @@ file \tt{bucketsort\_helpers.h} provides some utilities for parsing
 the command line, printing usage, etc.  Note that \tt{quicksort} is
 provided for you. 
 
+You may compile the standard code using:\\
+\tt{\$ mpicc -lm objs/bucketsort\_standard.<arch>.o -o
+  bucketsort\_standard}
+Notice that you need to link the math library using \tt{-lm}.
+
 Here are the criteria to keep in mind:
 \begin{enumerate}
 \item You must produce the correct results.  Respect the \tt{--print}
   option, it is stored in the \tt{print\_things} field of the options
-  struct. 
+  struct. If the list is to be printed, print both the sorted and
+  unsorted list out in the
+  exact same format as the standard code. 
+
 \item Only the root processor should ever have a full copy of the
   list.  So, only it should read the input file if one is provided,
   and only root 0 should generate the random data if there is no input
