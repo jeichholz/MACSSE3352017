@@ -179,7 +179,7 @@ def main(argv):
             e=time.time()
             standard_et=e-s;
             if (et>2.5*standard_et):
-                print "Error: This code took "+str(et)+" seconds to run, when the standard took "+str(et_standard)
+                print "Error: This code took "+str(et)+" seconds to run, when the standard took "+str(standard_et)
                 fail()
 
             check_output_correctness(s1,s1_stand)
