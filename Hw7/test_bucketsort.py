@@ -54,7 +54,7 @@ def run_command(command="",abort_on_failure=True,abort_on_timeout=True,timeout_r
             print "It looks like this code entered an infinite loop, or was stuck waiting for input, or just refused to exit.  I had to kill it manually. "
             fail()
         else:
-            returncode=timeout_returncode    
+            returncode=timeout_returncode
     if P.returncode != 0 and abort_on_failure:
         print s1
         print s2
@@ -91,7 +91,7 @@ def run_instance(standard,np=3,print_results=None,inputfile=None,P=50,timeout=de
     return returncode,s1,s2
 
 def check_output_correctness(s1,standard_s1):
-    retrieve_list_from_output=lambda s: [l.split(':')[1].strip() for l in s.split('\n') if len(l)>0 and l[0]=='L']
+    retrieve_list_from_output=lambda s: [l.split(':')[1].strip() for l in s.split('\n') if len(l)>0 and l[0]=='L' and l[1]==':']
     s1_numbers=retrieve_list_from_output(s1)
     s1_standard_numbers=retrieve_list_from_output(standard_s1)
 
@@ -114,15 +114,15 @@ def main(argv):
             exit()
     else:
          max_procs=180
-            
+
     mpicccommand=["mpicc"]+flags+map(lambda x:'-Wl,-wrap,'+x,wrapped_functions)+sourcefiles+map(lambda x:ref_dir()+x,helper_sourcefiles)+["-o",exename]
     gcc_status=run_command(mpicccommand,timeout=2)[0];
     if gcc_status != 0:
         print "Error, gcc either had warnings or the code completely failed to compile.  Fix these things before proceeding.  The compiler is your friend, and is trying to help you."
         fail()
-    
+
     width=100
-    #Test a couple random cases, test whether or not hte code respects the --print parameter.
+    # Test a couple random cases, test whether or not hte code respects the --print parameter.
     print "".join(['=' for i in range(width)]);
     dummy,s1,s2=run_instance(standard=False);
     dummy,s1_stand,s2_stand=run_instance(standard=True)
@@ -134,26 +134,26 @@ def main(argv):
     dummy,s1_stand,s2_stand=run_instance(standard=True,P=1000)
     check_output_correctness(s1,s1_stand)
 
-   #Test a couple random cases, test whether or not hte code respects the --print parameter.
+    #Test a couple random cases, test whether or not hte code respects the --print parameter.
     print "".join(['=' for i in range(width)]);
     dummy,s1,s2=run_instance(standard=False,P=75,print_results=1);
     dummy,s1_stand,s2_stand=run_instance(standard=True,P=75,print_results=1)
-    check_output_correctness(s1,s1_stand)    
+    check_output_correctness(s1,s1_stand)
 
-   #Test a couple random cases, test whether or not hte code respects the --print parameter.
+    #Test a couple random cases, test whether or not hte code respects the --print parameter.
     print "".join(['=' for i in range(width)]);
     dummy,s1,s2=run_instance(standard=False,P=25,print_results=0);
     dummy,s1_stand,s2_stand=run_instance(standard=True,P=25,print_results=0)
     check_output_correctness(s1,s1_stand)
 
 
-   #Test a couple random cases, test whether or not hte code respects the --print parameter.
+    #Test a couple random cases, test whether or not hte code respects the --print parameter.
     print "".join(['=' for i in range(width)]);
     dummy,s1,s2=run_instance(standard=False,inputfile="unsorted_list.txt",timeout=60);
     dummy,s1_stand,s2_stand=run_instance(standard=True,inputfile="unsorted_list.txt",timeout=60)
-    check_output_correctness(s1,s1_stand)    
+    check_output_correctness(s1,s1_stand)
 
-    
+
 
     #Finally, test the performance, along with number of messages sent.
     N=int(1e7)
@@ -167,7 +167,7 @@ def main(argv):
             print RED+"Warning: You have turned down the maximum number of processors to run efficiency tests with.  This is fine for testing, but I will run on grendel with up to 32 processes.  You should check your code there before considering the code done"+ENDC
             print "Similarly, I am turning down the size of the data that you are running on, to help it get done faster.  You need to take these results lightly."
             N=1e6
-        
+
         for p in np:
             print "".join(['=' for i in range(width)]);
             s=time.time()
@@ -181,7 +181,7 @@ def main(argv):
             if (et>2.5*standard_et):
                 print "Error: This code took "+str(et)+" seconds to run, when the standard took "+str(et_standard)
                 fail()
-                
+
             check_output_correctness(s1,s1_stand)
 
             #calculate the miscellaneous send total
@@ -189,7 +189,7 @@ def main(argv):
             if misc_sends > 10 * p:
                 print "Error, the code did a total of "+str(misc_sends)+" miscellaneous sends, which is more than "+str(10*p)+".  That is wayy more than needed."
                 fail()
-            #only rank 0 should do a send via scatterv and it should be N long. 
+            #only rank 0 should do a send via scatterv and it should be N long.
             scatterv_sends=[int(open('whatidid.rank.'+str(x)+'.txt').readlines()[4].split(':')[1].strip()) for x in range(p)]
             if any([s > 0 for s in scatterv_sends[1:]]):
                 print "Error! Only rank 0 should be the root on a scatterv in this algorithm!"
@@ -205,15 +205,15 @@ def main(argv):
             if any([allowable_range[0]>x or x>allowable_range[1] for x in alltoallv_sends]):
                 print "Error!  Each processor should send between "+str(allowable_range[0])+" and "+str(allowable_range[1])+" data via alltoallv.  Here is a list of how many sends each processor actually did. "+str(alltoallv_sends)
                 fail()
-                                 
+
             if any([allowable_range[0]>x or x>allowable_range[1] for x in gatherv_sends]):
                 print "Error!  Each processor should send between "+str(allowable_range[0])+" and "+str(allowable_range[1])+" data via gatherv.  Here is a list of how many sends each processor actually did. "+str(gatherv_sends)
                 fail()
 
     else:
         print RED+"Skipping performance test"+ENDC
-    
-    succeed() 
+
+    succeed()
 
 
 if __name__=='__main__':
