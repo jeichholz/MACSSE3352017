@@ -67,7 +67,7 @@ def run_command(command="",abort_on_failure=True,abort_on_timeout=True,timeout_r
         print s2
     return returncode,s1,s2
 
-def run_instance(standard,np=3,print_results=None,inputfile=None,P=50,timeout=default_timeout,print_output=True):
+def run_instance(standard,np=3,print_results=None,inputfile=None,make_outputfile=True,P=50,timeout=default_timeout,print_output=True):
     if not standard:
         for f in glob.glob('whatidid.*'):
             os.remove(f)
@@ -86,6 +86,10 @@ def run_instance(standard,np=3,print_results=None,inputfile=None,P=50,timeout=de
         command=command+['--output_file=sorted_standard.txt']
     else:
         command=command+['--output_file=sorted.txt']
+    if make_outputfile:
+        command=command+['--produce_outputfile=1']
+    else:
+        command=command+['--produce_outputfile=0']
 
     returncode,s1,s2=run_command(command,print_output=print_output,timeout=timeout)
     return returncode,s1,s2
@@ -156,7 +160,7 @@ def main(argv):
 
 
     #Finally, test the performance, along with number of messages sent.
-    N=int(1e7)
+    N=int(1e8)
     np=[1,2,4,8,16,32];
 
     np=[x for x in np if x<=max_procs];
@@ -171,18 +175,16 @@ def main(argv):
         for p in np:
             print "".join(['=' for i in range(width)]);
             s=time.time()
-            dummy,s1,s2=run_instance(standard=False,P=N,print_results=0,np=p,timeout=60);
+            dummy,s1,s2=run_instance(standard=False,P=N,print_results=0,np=p,timeout=60,make_outputfile=False);
             e=time.time();
             et=e-s;
             s=time.time();
-            dummy,s1_stand,s2_stand=run_instance(standard=True,P=N,print_results=0,np=p,timeout=60)
+            dummy,s1_stand,s2_stand=run_instance(standard=True,P=N,print_results=0,np=p,timeout=60,make_outputfile=False)
             e=time.time()
             standard_et=e-s;
             if (et>2.5*standard_et):
                 print "Error: This code took "+str(et)+" seconds to run, when the standard took "+str(standard_et)
                 fail()
-
-            check_output_correctness(s1,s1_stand)
 
             #calculate the miscellaneous send total
             misc_sends=sum([int(open('whatidid.rank.'+str(x)+'.txt').readlines()[1].split(':')[1].strip()) for x in range(p)])

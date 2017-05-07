@@ -69,7 +69,8 @@ Here are the criteria to keep in mind:
   option, it is stored in the \tt{print\_things} field of the options
   struct. If the list is to be printed, print both the sorted and
   unsorted list out in the
-  exact same format as the standard code. 
+  exact same format as the standard code. You must also respect the
+  \tt{--produce\_outputfile} flag. 
 
 \item Only the root processor should ever have a full copy of the
   list.  So, only it should read the input file if one is provided,

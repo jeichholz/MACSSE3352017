@@ -81,8 +81,10 @@ void main(int argc, char** argv){
 
   //At the end, the master prints out the sorted list if necessary, prints the outputfile, and if requested it checks to make sure that the list really is sorted. 
   if (rank==0){
-  write_outputfile(opts.outputfile,L,opts.n);
-     
+    if (opts.produce_outputfile){
+      write_outputfile(opts.outputfile,L,opts.n);
+    }
+    
      if (opts.print_things){
        printf("L:");
        print_arr(L,opts.n);

@@ -20,6 +20,7 @@ typedef struct{
   double b;
   int check_results;
   int print_things;
+  int produce_outputfile;
 } options;
 
 
@@ -71,6 +72,7 @@ void print_usage(){
   fprintf(stdout,"--bucket_size_multiplier=n  each bucket will have capacity n/p*bucket_size_multiplier\n");
   fprintf(stdout,"--input_file=filename       read the list for sorting out of filename rather than making it randomly.\n");
   fprintf(stdout,"--output_file=filename     the name of the output file to produce.  Defaults to sorted.txt");
+  fprintf(stdout,"--produce_outputfile=<0|1> if set to 0, do not produce a sorted list via file.  Defaults to 1\n");
   fprintf(stdout,"--range=a-b                random list is evenly distributed between a and b\n");
   fprintf(stdout,"--check-results=<0|1>      if set to 1, check the list at the end to make sure it is sorted.  If set to 0 then don't check. Default to 1.\n");
   fprintf(stdout,"--print=<0|1>              if set to 1, then will print the input array and the output array. Defaults to 1 if length of input array is <= 50, and defaults to 0 if length on input array is >50.\n");
@@ -83,6 +85,7 @@ void print_options(options* opts){
   printf("nproc: %d\n", opts->nproc);
   printf("input file: %s\n",opts->inputfile);
   printf("output file: %s\n",opts->outputfile);
+  printf("Produce outputfile: %s\n",opts->produce_outputfile==1?"YES":"NO");
   printf("data range:[%f-%f]\n",opts->a,opts->b);
   printf("print: %s\n",opts->print_things==1?"YES":"NO");
 
@@ -149,7 +152,7 @@ void parse_options(int argc, char** argv, options* opts){
   opts->outputfile[0]='\0';
   strcpy(opts->outputfile,"sorted.txt");
   opts->bucket_size_multiplier=8;
-
+  opts->produce_outputfile=1;
   opts->n=30;
   opts->a=0;
   opts->b=100;
@@ -190,6 +193,9 @@ void parse_options(int argc, char** argv, options* opts){
     }
     else if (sscanf(argv[i],"--print=%d",&dummyi)==1){
       opts->print_things=dummyi;
+    }
+    else if (sscanf(argv[i],"--produce_outputfile=%d",&dummyi)==1){
+      opts->produce_outputfile=dummyi;
     }
     else{
       if (rank==0){
