@@ -29,7 +29,7 @@ int main(int argc,char** argv){
   MPI_Comm_rank(MPI_COMM_WORLD,&myrank);
   
   //Read options from prompt, fill in defaults
-  strcpy(defaults.inputfile,"gol/pulsar.txt");
+  strcpy(defaults.inputfile,"gol_files/pulsar.txt");
   defaults.resolution[0]=512; defaults.resolution[1]=512;
   defaults.n_gens=100;
   //Parse the command line, use "defaults" for default values.

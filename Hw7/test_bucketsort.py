@@ -95,7 +95,7 @@ def run_instance(standard,np=3,print_results=None,inputfile=None,make_outputfile
     return returncode,s1,s2
 
 def check_output_correctness(s1,standard_s1):
-    retrieve_list_from_output=lambda s: [l.split(':')[1].strip() for l in s.split('\n') if len(l)>0 and l[0]=='L' and l[1]==':']
+    retrieve_list_from_output=lambda s: [l.split(':')[1].strip() for l in s.split('\n') if len(l)>0 and l[0]=='L' and ':' in l]
     s1_numbers=retrieve_list_from_output(s1)
     s1_standard_numbers=retrieve_list_from_output(standard_s1)
 
