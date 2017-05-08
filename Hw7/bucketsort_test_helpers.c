@@ -94,7 +94,9 @@ int __wrap_MPI_Scatterv(const void *sendbuf, const int sendcounts[], const int d
 			*recvbuf, int recvcount,MPI_Datatype recvtype, int root, MPI_Comm comm){
 
   int size,i;
-  if (sendbuf!=NULL){
+  int rank;
+  MPI_Comm_rank(comm,&rank);
+  if (rank==root){
     MPI_Comm_size(comm,&size);
     for (i=0;i<size;i++){
       num_scatterv_sends+=sendcounts[i];
