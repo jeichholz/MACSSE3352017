@@ -175,11 +175,11 @@ def main(argv):
         for p in np:
             print "".join(['=' for i in range(width)]);
             s=time.time()
-            dummy,s1,s2=run_instance(standard=False,P=N,print_results=0,np=p,timeout=60,make_outputfile=False);
+            dummy,s1,s2=run_instance(standard=False,P=N,print_results=0,np=p,timeout=120,make_outputfile=False);
             e=time.time();
             et=e-s;
             s=time.time();
-            dummy,s1_stand,s2_stand=run_instance(standard=True,P=N,print_results=0,np=p,timeout=60,make_outputfile=False)
+            dummy,s1_stand,s2_stand=run_instance(standard=True,P=N,print_results=0,np=p,timeout=120,make_outputfile=False)
             e=time.time()
             standard_et=e-s;
             if (et>2.5*standard_et):
