@@ -6,7 +6,7 @@
 
 \usepackage{amsmath}
 \usepackage{cancel}
-
+\usepackage{pdfpages}
 
 \input{MA335defs}
 
@@ -210,7 +210,8 @@ processor 1, and then begins elimination in column 1.  The method
 continues until the matrix is in row-echelon form.  Once the matrix is
 in row-echelon form, use back substitution, also pipelined, to find
 the solution vector $x$.   Collect $x$ on the root node, produce an
-output file or print $x$ out if requested.  
+output file or print $x$ out if requested.  See the attached pages for
+another description. 
 
 The standard code may be compiled with\\
 \tt{\$ mpicc objs/linear\_solve\_standard.<arch>.o -o
@@ -246,7 +247,7 @@ $2x$ time of the standard code.
  
 \end{enumerate}
 
-
+\includepdf[pages=-]{scans.pdf}
 
 
 

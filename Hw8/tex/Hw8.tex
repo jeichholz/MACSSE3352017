@@ -244,6 +244,12 @@ only needs to communicate with rank $j-1$ during elimination, and with
 rank $j+1$ during back substitution.  Your code must produce the
 correct results, respect all command line options, and must run within
 $2x$ time of the standard code. 
+
+\noindent\textbf{A note on sending rows:} The matrix data structure
+is storing rows contiguously.  So, if you want to send rows 3 and 4 of
+matrix $A$, and matrix $A$ is 20 wide, you can use just one
+\tt{MPI\_Send} like this\\
+\tt{MPI\_Send(A.data[3],40,MPI\_DOUBLE,...)}
  
 \end{enumerate}
 
