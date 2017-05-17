@@ -207,7 +207,7 @@ def main(argv):
             send_data=lambda f: [int(l.strip().split(':')[1].split()[1]) for l in open(f).readlines()]
             S=send_data('whatidid.rank.'+str(rank)+'.txt')
             for s in S:
-                if multiple_of(s,myprimes):
+                if multiple_of(s,myprimes) and s != -999:
                     print "Error. Rank "+str(rank)+" should end up being a filtering out all multiples of "+str(myprimes)+". However, it is forwarding "+str(s)+" at some point."
                     fail()
 
