@@ -214,8 +214,8 @@ def main(argv):
 
     #Big cases.
     print "".join(['=' for i in range(width)]);
-    dummy,s1,s2=run_instance(standard=False,make_outputfile=True,N=50000,np=27);
-    dummy,s1_stand,s2_stand=run_instance(standard=True,make_outputfile=True,N=50000,np=27)
+    dummy,s1,s2=run_instance(standard=False,make_outputfile=True,N=50000,np=27,timeout=120);
+    dummy,s1_stand,s2_stand=run_instance(standard=True,make_outputfile=True,N=50000,np=27,timeout=120)
     check_output_correctness(s1,s1_stand,checkfiles=True)  
                     
     succeed()
