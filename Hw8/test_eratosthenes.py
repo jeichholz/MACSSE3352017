@@ -196,16 +196,17 @@ def main(argv):
         for rank in range(np):
             send_partners=lambda f: [int(l.strip().split(':')[1].split()[0]) for l in open(f).readlines()]
             #Processors should only send to the next rank, or maybe rank 0.
-            if any([s != rank+1 and s!=0 for s in send_partners('whatidid.rank.'+str(rank)+'.txt')]):
+            if any([s != rank+1 and s!=0 for s in send_partners('whatidid.rank.'+str(rank)+'.txt')[:-1]]):
                 print "Error, somewhere along the way rank "+str(rank)+" sent to a processor other than "+str(rank+1)+" or 0.  You aren't pipelining at that point."
                 fail()
             send_sizes=lambda f: [int(l.strip().split(':')[1].split()[2]) for l in open(f).readlines()]
-            if any([d!=1 and d!=0 for d in send_sizes('whatidid.rank.'+str(rank)+'.txt')]):
+            if any([d!=1 and d!=0 for d in send_sizes('whatidid.rank.'+str(rank)+'.txt')[:-1]]):
                 print "This is supposed to be a very classic pipelining algorithm -- send only one piece of data at a time.  Rank "+str(rank)+" sent a non-zero and non-one amount of data somewhere."
                 fail()
             myprimes=primeslist[rank*(p/np):(rank+1)*(p/np)]
             send_data=lambda f: [int(l.strip().split(':')[1].split()[1]) for l in open(f).readlines()]
-            S=send_data('whatidid.rank.'+str(rank)+'.txt')
+  
+            S=send_data('whatidid.rank.'+str(rank)+'.txt')[:-1]
             for s in S:
                 if s>0 and multiple_of(s,myprimes):
                     print "Error. Rank "+str(rank)+" should end up being a filtering out all multiples of "+str(myprimes)+". However, it is forwarding "+str(s)+" at some point."
